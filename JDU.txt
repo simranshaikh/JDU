@@ -1,0 +1,941 @@
+Q 1 [ Marks : 15 ]
+
+Create a package com.student. Define an interface called StudentInt in the package com.student with following methods:
+
+readStudInfo( )  		// To accept the details of the students
+calcTotal()			// To calculate the total marks
+printStudInfo( ) 		// To print the student details 
+
+Define a class Student in the package com.student which implements StudentInt interface with following private properties: 
+
+int rollNo  
+String name  
+int subject1  
+int subject2  
+int subject3
+int totalMarks  
+
+
+Define a class StudentImp having main method in com.test package with following functionality:
+
+•	Read the details of one student from user and store an object of Student class in the file StudentInfo.txt
+
+•	Read the Student object from the same file and display details on screen.
+ 
+
+
+-------------------->
+
+1-1.Student:
+=======================================================================
+package com.student1;
+
+import java.io.Serializable;
+
+public class Student implements StudentInt, Serializable {
+	
+	private int rollNo;
+	private String name;
+	private int subject1;
+	private int subject2;
+	private int subject3;
+	private int totalMarks;
+
+    public int getRollNo() {
+        return rollNo;
+    }
+
+    public void setRollNo(int rollNo) {
+        this.rollNo = rollNo;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getSubject1() {
+        return subject1;
+    }
+
+    public void setSubject1(int subject1) {
+        this.subject1 = subject1;
+    }
+
+    public int getSubject2() {
+        return subject2;
+    }
+
+    public void setSubject2(int subject2) {
+        this.subject2 = subject2;
+    }
+
+    public int getSubject3() {
+        return subject3;
+    }
+
+    public void setSubject3(int subject3) {
+        this.subject3 = subject3;
+    }
+
+    public int getTotalMarks() {
+        return totalMarks;
+    }
+
+   
+
+	
+
+	// method is to initialise details
+	@Override
+	public void readStudInfo(int rollNo, String name, int subject1, int subject2, int subject3) {
+		this.rollNo = rollNo;
+		this.name = name;
+		this.subject1 = subject1;
+		this.subject2 = subject2;
+		this.subject3 = subject3;
+		
+
+	}
+
+	// method to print totalmarks
+	@Override
+	public void calcTotal() {
+            totalMarks=subject1+subject2+subject3;
+		System.out.println("Total marks obtained:" + this.totalMarks);
+
+	}
+
+	// method to print student details
+	@Override
+	public void printStudInfo() {
+		System.out.println("Student rollno:" + this.rollNo);
+		System.out.println("Student name:" + this.name);
+		System.out.println("Marks obtained in subject1:" + this.subject1);
+		System.out.println("Marks obtained in subject2:" + this.subject2);
+		System.out.println("Marks obtained in subject3:" + this.subject3);
+                
+
+	}
+
+    @Override
+    public String toString() {
+        return "Student{" + "rollNo=" + rollNo + ", name=" + name + ", subject1=" + subject1 + ", subject2=" + subject2 + ", subject3=" + subject3 +  '}';
+    }
+
+}
+
+ ---------------------------------------------------------------------------------------------------------------------------------------
+STUDENT INT:
+
+
+package com.student1;
+
+public interface StudentInt {
+	public void readStudInfo(int rollNo, String name, int subject1, int subject2, int subject3);
+	public void calcTotal();
+	public void printStudInfo();
+	
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.test1;
+
+import com.package1.*;
+import java.util.Scanner;
+
+/**
+ *
+ * @author techm
+ */
+public class StudentImp {
+    public static void main(String[] args) {
+        Scanner s=new Scanner(System.in);
+        Student st=new Student();
+        System.out.println("enter the roll no of student");
+        st.setRollNo(s.nextInt());
+        System.out.println("enter the name of student");
+        st.setName(s.next());
+        System.out.println("Enter marks in subject1..");
+        st.setSubject1(s.nextInt());
+        System.out.println("Enter marks in subject2..");
+       st.setSubject2(s.nextInt());
+      System.out.println("Enter marks in subject3..");
+      st.setSubject3(s.nextInt());
+        st.readStudInfo(st.getRollNo(),st.getName(),st.getSubject1(),st.getSubject2(),st.getSubject3());
+        st.calcTotal(st.getSubject1(),st.getSubject2(),st.getSubject3());
+        st.printStudInfo();
+        
+       
+        
+    }
+
+ }
+
+=======================================================================================
+
+2)
+
+Create a multithreaded application as below:
+
+a)	Design a class Item with the following members 
+itemId
+itemName
+
+Parameterized constructor to initialize the properties
+Method to display item details
+
+b)	First thread will write 5 Item objects into an array list.
+c)	Second thread will display all item information on the console.
+
+
+
+---------------------------->
+
+
+package item;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.Scanner;
+
+public class Item  {
+   int  itemId;
+String itemName;
+
+    public Item(int itemId, String itemName) {
+        this.itemId = itemId;
+        this.itemName = itemName;
+    }
+     public void display(){
+          
+            System.out.println(itemId+"                 "+itemName);
+     }
+}
+
+
+class Thread1 implements Runnable{
+Scanner s=new Scanner(System.in);
+ArrayList<Item> a1=new ArrayList<>();
+       Item[ ] item =new Item[5];
+    @Override
+    public void run() {
+      synchronized (this) {
+          for(int i=0;i<5;i++){
+            System.out.println("Enter Itemid,ItemName of item "+i);
+            item[i] =new Item(s.nextInt(),s.next());
+            a1.add(item[i]);
+        }
+  }
+}
+}
+    class Thread2 implements Runnable{
+      Thread1 first;// To get the all details from FirstThread
+      Thread2(Thread1 ff) {
+         this.first = ff;
+}
+    public void run() {
+      synchronized (first) {
+ Iterator i = first.a1.iterator();
+System.out.println("Second thread get started to print the item details\n");
+System.out.println("The Item Details are");
+System.out.println("displaying details of item");
+          System.out.println(" ITEMID               ITEMNAME");
+          System.out.println("--------------------------------------------------");
+while (i.hasNext()) {
+Item item1 = (Item) (i.next());// type casting into the Item
+// object
+
+item1.display();// calling the display method in Item class to get the details
+			}
+       }
+     
+        }
+    
+        }
+
+class threadTest{
+    
+    public static void main(String[] args) {
+        
+        Thread1 t=new Thread1();
+        Thread t1=new Thread(t);
+        t1.start();
+        Thread2 T=new Thread2(t);
+        Thread t2=new Thread(T);
+        t2.start();
+
+    }
+}
+
+=========================================================================================
+
+
+
+3)
+
+Design a class Book containing following members:
+
+	bookID		text
+	title		text
+	author		text
+	category 	text 
+	price		float
+	
+Define Parameterized constructor to initialize Book object. Perform the below validations
+
+•	Category must be “Science”, “Fiction”, “Technology” or “Others” 
+•	Price cannot be negative
+•	bookID must start with ‘B’ and must be of length 4 characters
+
+If any of the validations fail, throw an user defined exception InvalidBookException.
+
+Design a class called BookStore which contains an appropriate collection object to store Book instances.
+
+Implement the below operations.
+
+1.	addBook(Book b)
+To add a new Book object into the collection. 
+
+2.	searchByTitle(String title)
+Search a book based on title and if found, display the details
+
+3.	searchByAuthor(String author)
+Search a book based on author and if found, display the details
+
+4.	displayAll()
+Print the details of all the books
+
+Store both classes in a package com.book. 
+
+Create a class BookUtil in package com.bookutil which has the main method. 
+
+•	Instantiate the BookStore class 
+•	Read data from user for 3 Book objects. 
+•	Call the addBook method to add the book objects into the collection
+•	Search the books by title and author
+•	Display all the book details
+
+
+
+-------------------------------------->
+
+
+public class Book {
+public String  bookId;		
+public String   title;		
+public String   author;		
+public String category ;	
+public float price;		
+
+    public Book(String bookId, String title, String author, String category, float price) throws InvalidBookException {
+        if((bookId.length()!=4)&&(bookId.charAt(0)!='B'))
+              {   
+               throw new InvalidBookException();
+          }
+          this.bookId=bookId;
+       this.title = title;
+       this.author = author;     
+       if(category.equals("Friction")||category.equals("Science")||category.equals("Technology")||category.equals("Others")) {         
+    this.category = category;
+        }
+       else {
+             throw new InvalidBookException();
+        }
+        if(price>0){
+            this.price = price;}
+             else {
+             throw new InvalidBookException();     
+        }  
+    }
+
+    public String getBookId() {
+        return bookId;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public float getPrice() {
+        return price;
+    }    
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.book;
+import java.util.*;
+import java.util.ArrayList;
+import com.book.BookStore;
+/**
+ *
+ * @author techm
+ */
+public class BookStore {
+    ArrayList<Book> bookStore=new ArrayList<Book>(); 
+    public void addBook(Book b){
+        bookStore.add(b);
+    }
+    public void searchByTitle(String title){
+        for(int i=0;i<3;i++){
+        if(bookStore.get(i).getTitle().equals(title)){
+            System.out.println("Displaying thedetails of the book:"+title);
+            System.out.println("Book ID:"+bookStore.get(i).getBookId()+"  "+"BookName:"+bookStore.get(i).getTitle()+"  "+"Bookauthor"+bookStore.get(i).getAuthor()+"   "+"Book Category:"+bookStore.get(i).getCategory()+"  "+"Book Price:"+bookStore.get(i).getPrice());
+        } 
+        }
+    }
+
+        public void searchByAuthor(String author){
+        for(int i=0;i<3;i++){
+        if(bookStore.get(i).getAuthor().equals(author)){
+            System.out.println("Displaying the details of the book:"+author);
+            System.out.println("Book ID:"+bookStore.get(i).getBookId()+"BookName:"+bookStore.get(i).getTitle()+"Bookauthor"+bookStore.get(i).getAuthor()+"Book Category:"+bookStore.get(i).getCategory()+"Book Price:"+bookStore.get(i).getPrice());
+        }
+        else
+            System.out.println("book not found");
+             
+        }
+    }
+        public void displayAll(){
+            for(int i=0;i<3;i++){
+            System.out.println("Displaying the details of the all books");
+            System.out.println("Book ID:"+bookStore.get(i).getBookId()+"BookName:"+bookStore.get(i).getTitle()+"Bookauthor"+bookStore.get(i).getAuthor()+"Book Category:"+bookStore.get(i).getCategory()+"Book Price:"+bookStore.get(i).getPrice());
+        }
+            
+        }
+    
+}
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.book;
+
+/**
+ *
+ * @author techm
+ */
+public class InvalidBookException extends Exception{
+    public void InvalidBookException(){
+        System.out.println("invalid book exception");
+        
+    }
+    
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.bookutil;
+import  com.book.BookStore;
+import com.book.Book;
+import com.book.InvalidBookException;
+import java.util.Scanner;
+        
+
+/**
+ *
+ * @author techm
+ */
+public class BookUtil {
+    public static void main(String[] args) throws InvalidBookException{
+        Scanner s=new Scanner(System.in);
+        System.out.println("enter the details of book1");
+        System.out.println("enter bookId,book title,book author, book cataegory,book price");
+        Book b1=new Book(s.next(),s.next(),s.next(),s.next(),s.nextFloat());
+         System.out.println("enter the details of book2");
+        System.out.println("enter bookId,book title,book author, book cataegory,book price");
+         Book b2=new Book(s.next(),s.next(),s.next(),s.next(),s.nextFloat());  
+          System.out.println("enter the details of book3");
+        System.out.println("enter bookId,book title,book author, book cataegory,book price");
+         Book b3=new Book(s.next(),s.next(),s.next(),s.next(),s.nextFloat());
+         BookStore B=new BookStore();
+         B.addBook(b1);
+         B.addBook(b2);
+         B.addBook(b3);
+         System.out.println("enter the title of the book you want to search");
+         String Title=s.next();
+         B.searchByTitle(Title);
+          System.out.println("enter the author of the book you want to search");
+          String Author=s.next();
+         B.searchByAuthor(Author);
+         B.displayAll();
+         
+         
+        
+    }
+    
+}
+
+
+
+===================================================================================
+
+
+4)
+
+Design an interface Language with the below method.
+
+void showMessage( )
+
+Design the class  CLang which implements Language Interface.  In showMessage( ),  it prints the message that “C Program is running” .
+Design the class  JavaLang which implements Language Interface.  In showMessage( ),    it prints the message that “Java Program is running”. 
+
+We want to simulate running of both programs simultaneously.  Use multithreading to achieve this.  
+
+Create the TestClient class which creates one object of each of the above 2 classes.
+
+Ask the user to select his/her favorite language to be run first. For example if user provider the input as  “Java”, set highest thread priority to Java Thread.  
+
+The output may be as follows:
+
+                       “Java Program is running”
+                       “C Program is running”
+
+In case of  “C” as input, the output may be,
+
+                        “C Program is running”
+	           “Java Program is running”
+
+
+
+------------------------->
+
+
+package com.thread;
+
+
+public class CLang implements Language,Runnable{
+
+    public void run(){
+        
+     showMessage();
+    }
+    public void showMessage(){
+        
+        System.out.println("C Programming is running");
+    }
+    
+    
+    
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.thread;
+
+/**
+ *
+ * @author techm
+ */
+public class JavaLang implements Language,Runnable{
+    String name;
+    Thread t;
+    public void run(){
+    
+     showMessage();
+    }
+
+    @Override
+    public void showMessage(){
+        
+        System.out.println("Java Programming is running");
+    }
+
+    
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+package com.thread;
+
+
+public interface Language  {
+   
+
+
+
+    
+    public void showMessage();
+    
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.thread;
+import com.thread.*;
+import java.util.Scanner;
+
+/**
+ *
+ * @author techm
+ */
+public class TestClient {
+    public static void main(String[] args){
+        Scanner s=new Scanner(System.in);
+       JavaLang t=new JavaLang();
+      
+      CLang T=new CLang();
+      Thread t1=new Thread(t);
+      Thread t2=new Thread(T);
+     
+      System.out.println("Enter your favorite language to be run first");
+      String first;
+      first=s.next();
+      if(first.equals("Java")){
+          t1.setPriority(10);
+          System.out.println("priority set for javaLang"); 
+          t2.setPriority(1);
+           t1.start();
+            t2.start();
+             
+       
+      }
+      else if(first.equals("C")){
+          t2.setPriority(10);
+          t1.setPriority(1);
+          System.out.println("priority set for CLang"); 
+          t2.start();
+            t1.start();
+           
+      }
+      
+      System.out.println("priority of cLang thread:"+t2.getPriority()); 
+        System.out.println("priority of JavaLang thread:"+t1.getPriority()); 
+        
+    }
+    
+}
+
+
+====================================================================
+
+
+Create an abstract class called Vehicle which contains the following members.
+
+vehicleNo	         	int
+engineStatus	String(on/off)
+currentGear	int
+           
+parametrized constructor to construct and initialize an object.
+
+abstract void ignite()
+abstract int changeGear(int flag)
+abstract void stop()
+
+Design the class Car which extends Vehicle and has the following members:
+
+powerStearing		Boolean type
+fuelType			String type (Gas/Petrol/Deisel)
+
+parametrized constructor
+
+void showCarDetails( ) 	// To display the car details
+
+Override the abstract methods of the superclass Vehicle as per the specification below. 
+
+The ignite() function must set the engineStatus to on and currentGear to 1.
+The stop() function must set the engineStatus to off and currentGear to 0.
+
+changeGear() function should take a flag as parameter. 
+
+•	If the flag is 1, the currentGear must be increased by 1. But make sure that the currentGear doesn’t exceed 6. 
+
+•	If the flag is -1, the currentGear must be decreased by 1. But the minimum currentGear value is 1 below which it cannot be reduced. 
+
+Store both the classes in a package com.vehicle
+
+Write a class called TestVehicle in a package com.vehicle.test which has the main method. 
+
+Create a reference to the class Vehicle. The reference of class Vehicle should refer to object of Car class. Invoke all the methods using Vehicle reference object.
+
+Invoke the showCarDetails() of the Car class after typecasting the Vehicle reference to Car type.
+
+
+
+------------------------------------------->
+
+
+3-1. VEHICLE : 
+package com.vehicle.test;
+import  com.vehicle.*;
+import java.util.Scanner;
+public class TestVehicle {
+public static void main(String args[]) {
+	
+
+	Vehicle v=new Car(1111,true,"Petrol");
+	v.ignite();
+	Scanner sc=new Scanner(System.in);
+	System.out.println("enter flag value as 1 or -1:");
+	int flag=sc.nextInt();
+	v.changeGear(flag);
+
+	sc.close();
+	Car c =(Car) v;
+	
+	c.showCarDetails();
+	v.stop();
+	c.showCarDetails();
+}
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+package com.vehicle;
+
+public class Car extends Vehicle{
+	private static boolean powerStearing;
+	private static String fuelType;
+	
+	public Car(int vehicleNo,boolean powerStearing,String fuelType)
+	{
+			super(vehicleNo);
+			this.powerStearing=powerStearing;
+			if(fuelType=="Petrol"||fuelType=="Deisel"||fuelType=="Gas")
+				this.fuelType=fuelType;
+				else
+				System.out.println("Enter Fuel type Petrol,Deisel,Gas");
+			
+		}
+	
+	boolean getPowerStearing(){return powerStearing;}
+	String getFuelType(){return fuelType;}
+	int getVehicleNo(){return vehicleNo;}
+	String getEngineStatus(){return engineStatus;}
+	int getCurrentGear(){return currentGear;}
+	
+	public void showCarDetails(){
+			System.out.println("Vehicle No: "+vehicleNo+" Power stearing available: "+powerStearing+" FuelType :"+fuelType+" Engine Status: "+engineStatus+" Current Gear"+currentGear);
+			
+}
+	public void ignite()
+	{
+		engineStatus="on";
+		currentGear=1;
+	}
+	
+	public void stop()
+	{
+		engineStatus="off";
+		currentGear=0;
+	}
+	
+	public int changeGear(int flag)
+	{
+		if(currentGear<6&&currentGear>0)
+		if(flag==1)
+			currentGear+=1;
+		else if(flag==-1)
+			currentGear-=1;
+	return currentGear;
+	}
+	
+}
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+package com.vehicle;
+
+public abstract class Vehicle {
+	protected static int vehicleNo;
+	 protected static String engineStatus;
+	 protected static int currentGear;
+	 public Vehicle(int vehicleNo) {
+		 this.vehicleNo=vehicleNo;
+		}
+	 public abstract void ignite();
+	 public abstract int changeGear(int flag);
+	 public abstract void stop();
+}
+
+==========================================================================
+
+
+6)
+
+Create a class Employee which has the following members:
+
+empId		integer type
+empName		String 
+grade		String (Possible values U1,U2,U3,U4,P1,P2)
+
+mutator and accessor methods.
+
+Also override the toString method in the class. 
+
+Write a class TestFile which contains the main method doing the below. 
+
+a)	Ask the user to enter the total number of employees. Create n Employee objects and store them in an array.
+
+b)	If the grade entered is not in the permitted list of values, throw an user defined exception InvalidGradeException and handle.
+
+c)	In case of no Exception, write the Array of objects into a file empdetails.txt. Use proper delimiters to separate the empId, empName and grade. Every Employee object should be written in a new line in the file.
+
+d)	Read the Array of objects from the file and display the information to the console.
+
+
+
+----------------------------------------------->
+
+
+3-2. EMPLOYEE : 
+
+
+package com.employee;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Scanner;
+import java.util.*;
+
+
+
+public class Employee implements Serializable{
+  int   empId;		
+String empName;		 
+String grade	;
+
+    public int getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(int empId) {
+        this.empId = empId;
+    }
+
+    public String getEmpName() {
+        return empName;
+    }
+
+    public void setEmpName(String empName) {
+        this.empName = empName;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" + "empId=" + empId + ", empName=" + empName + ", grade=" + grade + '}';
+    }
+}
+class TestFile{
+    public static void main(String[] args) throws Exception{
+        Scanner s=new Scanner(System.in);
+        System.out.println("enter the number of employees'");
+        int n=s.nextInt();
+        Employee[] e=new Employee[n];
+  for(int i=0;i<n;i++){
+      
+  e[ i]=new Employee();
+  System.out.println("enter the employee id");
+       e[i].setEmpId(s.nextInt());
+       System.out.println("enter the employee name");
+        e[i].setEmpName(s.next());
+        System.out.println("Grades U1or U2 or  U3 or U4 or  P1 or P2");
+        System.out.println("enter the employee grade");
+       e[i].setGrade(s.next());{
+       if (e[i].getGrade().matches("U1")){
+           System.out.println("garde is U1");}
+       else if(e[i].getGrade().matches("U2")){
+           System.out.println("garde is U2");}
+        else if(e[i].getGrade().matches("U3")){
+           System.out.println("garde is U3");}
+         else if(e[i].getGrade().matches("U4")){
+           System.out.println("garde is U4");}
+       else if(e[i].getGrade().matches("P1")){
+           System.out.println("garde is P1");}
+       else if(e[i].getGrade().matches("P2")){
+           System.out.println("grade is P2");}
+  
+       else
+           throw new InvalidGradeException();
+    
+}
+
+           
+       }
+  for(int i=0;i<n;i++)
+           {
+             System.out.println ("employee id:"+e[i].getEmpId()+"employee name"+e[i].getEmpName()+"employee grade"+e[i].getGrade());
+               
+           }
+  
+  
+  File f=new File("empdetails.txt");
+  FileOutputStream fos=new FileOutputStream(f);
+  ObjectOutputStream oos=new ObjectOutputStream(fos);
+  oos.writeObject(e);
+  fos.close();
+  oos.close();
+ System.out.println("serialisation successfull");
+  FileInputStream fis=new FileInputStream(f);
+  ObjectInputStream ois=new ObjectInputStream(fis);
+  Employee E[ ]=(Employee[ ]) ois.readObject();
+  fis.close();
+   ois.close();
+  System.out.println("Deserialisation successfull");
+  for(int i=0;i<n;i++)
+          {
+            System.out.println ("employee id:"+E[i].getEmpId()+"employee name"+E[i].getEmpName()+"employee grade"+E[i].getGrade());
+               
+           }
+  
+          
+  
+  
+  
+  
+    }
+}
+
+
+=====================================================================================
+
+
+
+7)
+
+
